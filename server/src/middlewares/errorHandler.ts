@@ -1,20 +1,26 @@
+// src/middlewares/errorHandler.ts
 import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import logger from '../config/logger';
+import { logger } from '../config';
+import httpStatus from 'http-status-codes';
 
-export const errorHandler = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
+interface AppError extends Error {
+  statusCode?: number;
+  isOperational?: boolean;
+}
 
-  logger.error(`[${statusCode}] ${err.message}`);
+export const errorHandler = (err: AppError,req: Request,res: Response,next: NextFunction) => {
+  const statusCode = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+  const message = err.message || 'Something went wrong';
+
+  logger.error(message, {
+    // stack: err.stack,
+    statusCode,
+    path: req.originalUrl,
+    method: req.method,
+  });
 
   res.status(statusCode).json({
     success: false,
-    message: err.message || 'Something went wrong',
-    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
+    message,
   });
 };

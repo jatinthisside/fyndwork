@@ -1,15 +1,44 @@
-import { createLogger, format, transports } from 'winston';
+import winston from 'winston';
+import 'winston-mongodb';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const logger = createLogger({
-  level: 'info',
-  format: format.combine(
-    format.timestamp(),
-    format.colorize(),
-    format.printf(({ timestamp, level, message }) => {
-      return `[${timestamp}] ${level}: ${message}`;
-    })
-  ),
-  transports: [new transports.Console()],
+// Add colors for each level
+const logColors: Record<string, string> = {
+  error: '\x1b[31m',  // red
+  warn: '\x1b[33m',   // yellow
+  info: '\x1b[36m',   // cyan
+  http: '\x1b[35m',   // magenta
+  debug: '\x1b[32m',  // green
+};
+
+const resetColor = '\x1b[0m';
+
+// Format: [TIME] LEVEL - message
+const consoleFormat = winston.format.printf(({ level, message, timestamp, ...meta }) => {
+  const color = logColors[level] || '';
+  const metaString = Object.keys(meta).length ? ` | ${JSON.stringify(meta)}` : '';
+  return `${color}[${timestamp}] ${level.toUpperCase()} - ${message}${metaString}${resetColor}\n`;
 });
 
-export default logger;
+export const logger = winston.createLogger({
+  level: 'debug', // log http and above (http, info, warn, error)
+  format: winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+    winston.format.errors({ stack: true }),
+    winston.format.splat()
+  ),
+  transports: [
+    new winston.transports.Console({
+      format: consoleFormat,
+    }),
+    new winston.transports.MongoDB({
+      level: 'http',
+      db: process.env.MONGO_URI as string,
+      options: { useUnifiedTopology: true },
+      collection: 'logs',
+      tryReconnect: true,
+      metaKey: 'meta',
+    }),
+  ],
+});
