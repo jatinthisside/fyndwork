@@ -5,9 +5,8 @@ import {logger} from '../config';
 dotenv.config();
 
 export const connectToDB = async () => {
-    const MONGO_URI = process.env.MONGO_URII;
+    const MONGO_URI = process.env.MONGO_URI;
   try {
-    console.log('Connecting to MongoDB Atlas...', MONGO_URI);
     await mongoose.connect(MONGO_URI as string);
     logger.info('Connected to MongoDB Atlas');
   } catch (err) {
