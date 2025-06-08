@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema(
     created_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     updated_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true }
+  { timestamps: true, underscore: true }
 );
 
 export const User = mongoose.model("User", userSchema);
