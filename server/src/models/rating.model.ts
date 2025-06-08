@@ -18,4 +18,4 @@ const RatingReviewSchema = new mongoose.Schema(
   { timestamps: true, underscore:true }
 );
 
-export const RatingReviewModel = mongoose.model('RatingReview', RatingReviewSchema);
+export const RatingReview = mongoose.model('RatingReview', RatingReviewSchema);

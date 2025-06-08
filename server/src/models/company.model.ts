@@ -41,7 +41,7 @@ const CompanyProfileSchema = new mongoose.Schema(
   { timestamps: true, underscore: true }
 );
 
-export const CompanyProfileModel = mongoose.model(
+export const CompanyProfile = mongoose.model(
   "CompanyProfile",
   CompanyProfileSchema
 );

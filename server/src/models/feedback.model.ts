@@ -49,4 +49,4 @@ const FeedbackSchema = new mongoose.Schema(
   { timestamps: true, underscore : true }
 );
 
-export const FeedbackModel = mongoose.model('Feedback', FeedbackSchema);
+export const Feedback = mongoose.model('Feedback', FeedbackSchema);

@@ -27,4 +27,4 @@ const ApplicationSchema = new mongoose.Schema(
 
 ApplicationSchema.index({ student: 1, opportunity: 1 }, { unique: true });
 
-export const ApplicationModel = mongoose.model('Application', ApplicationSchema);
+export const Application = mongoose.model('Application', ApplicationSchema);
