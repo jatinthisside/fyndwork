@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// [TODO]: we can add a field eg. is_verified to ensure that the feedback is geniun and if it is, than we can give reward to user
 const FeedbackSchema = new mongoose.Schema(
   {
     user: {
