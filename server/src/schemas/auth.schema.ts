@@ -18,3 +18,12 @@ export const loginSchema = z.object({
     email: z.string({required_error:"email id is required!"}).email("Invalid email format"),
     password: z.string({required_error:"password field is required"}).min(6, "Password must be at least 6 characters long"),
 })
+
+export const sendOtpSchema = z.object({
+    email: z.string({required_error:"email id is required!"}).email("Invalid email format"),
+})
+
+export const verifyOtpSchema = z.object({
+    email: z.string({required_error:"email id is required!"}).email("Invalid email format"),
+    otp: z.string({required_error:"otp is required"}).length(6, "OTP must be exactly 6 characters long"),
+})
