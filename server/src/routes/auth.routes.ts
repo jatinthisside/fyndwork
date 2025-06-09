@@ -8,3 +8,5 @@ const router = express.Router();
 
 router.post("/signup", authLimiter, validateRequest(signupSchema), signup);
 router.post("/login", authLimiter, validateRequest(loginSchema), signin);
+
+export default router;
