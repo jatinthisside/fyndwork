@@ -4,6 +4,7 @@ import { User } from "../models";
 import { hashPassword, sendEmail } from "../helpers";
 import { generateOTP } from "../utils";
 import { redisClient } from "../config";
+import { JWT_SECRET, JWT_EXPIRES } from '../config';
 
 export const signup = async (req: Request, res: Response) : Promise<any> => {
   try {
@@ -56,6 +57,7 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
 
 export const signin = async (req: Request, res: Response) : Promise<any> => {
   try {
+
   } catch (error: any) {
     console.error("Error during signup:", error);
     throw new Error(error.message);
