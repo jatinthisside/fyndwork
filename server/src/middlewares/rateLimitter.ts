@@ -11,3 +11,9 @@ export const otpRateLimiter = rateLimit({
   max: 3, // 3 OTP requests per window
   message: 'Too many OTP requests, try again later',
 });
+
+export const loginLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 min
+  max: 5,                 
+  message: { message: 'Too many login attempts, please try again later.' },
+});
