@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { logger } from "../config";
 
 export const hashPassword=(password:any)=>{
     try {
@@ -6,7 +7,7 @@ export const hashPassword=(password:any)=>{
         const hashedPassword = bcrypt.hash(password, saltRounds);
         return hashedPassword;
     } catch (error) {
-        console.error("Error hashing password:", error);
+        logger.error("Error hashing password:", error);
         throw new Error("Failed to hash password");
     }
 }
