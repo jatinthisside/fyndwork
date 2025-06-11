@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { User } from "../models";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { hashPassword, sendEmail } from "../helpers";
 import { generateOTP } from "../utils";
 import { redisClient } from "../config";
-import { JWT_SECRET, JWT_EXPIRES } from '../config';
+import { JWT_SECRET, JWT_EXPIRES,NODE_ENV } from '../config';
 
 export const signup = async (req: Request, res: Response) : Promise<any> => {
   try {
@@ -57,7 +59,47 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
 
 export const signin = async (req: Request, res: Response) : Promise<any> => {
   try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ sucess:false, message: 'User with email not exits' });
+    }
 
+    if(!user.password) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ sucess:false, message: 'user wont have any password!' });
+    }
+
+    // Check if the password matches
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new Error('Invalid credentials');
+
+    if(!JWT_SECRET || !JWT_EXPIRES) {
+      throw new Error('JWT_SECRET or JWT_EXPIRES is not defined in environment variables');
+    }
+
+    const payload = {
+      user_id: user._id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    }
+
+   // Sign JWT
+   const token = jwt.sign(payload, JWT_SECRET, {
+     expiresIn: "24hr", // Token will expire in 24 hours
+     algorithm: 'HS256',
+   });
+
+    // Set cookie
+    res
+      .cookie('token', token, {
+        httpOnly: NODE_ENV !== 'production', // Set httpOnly to true in production
+        secure: NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000, // 24 hr
+      })
+      .status(StatusCodes.OK)
+      .json({ message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
   } catch (error: any) {
     console.error("Error during signup:", error);
     throw new Error(error.message);
