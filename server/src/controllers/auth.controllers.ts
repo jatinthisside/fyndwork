@@ -134,7 +134,7 @@ export const verifyOtp = async (req: Request, res: Response): Promise<any> => {
       const storedOtp = await redisClient.get(`otp:${email}`);
       if (storedOtp == otp) {
         await redisClient.setEx(`verified:${email}`, 600, 'true'); //expires in 10 min
-        res.status(200).json({ message: 'Email verified. You can now signup.' });
+        res.status(200).json({success:true, message: 'Email verified. You can now signup.' });
       } else {
          res.status(StatusCodes.ACCEPTED).json({success:false, message: 'Invalid or expired OTP' });
       }
