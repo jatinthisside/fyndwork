@@ -11,6 +11,23 @@ import { JWT_SECRET, JWT_EXPIRES,NODE_ENV } from '../config';
 export const signup = async (req: Request, res: Response) : Promise<any> => {
   try {
     const {email,name,role,password,about,city,state,country,pincode,street} = req.body;
+
+    if(!name || !email || !role || !password) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Name, email, role and password are required fields",
+      });
+    }
+
+    if(role === 'company') {
+      if(!about || !city || !state || !country || !pincode || !street) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          success: false,
+          message: "all fields are required for company",
+        });
+      }
+    }
+
     const isUserExists = await User.findOne({ email });
 
     if (isUserExists) {
