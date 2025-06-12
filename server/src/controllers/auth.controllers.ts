@@ -52,7 +52,7 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
     });
 
   } catch (error: any) {
-    logger.error("Error during signup:", error);
+    logger.error(`Error during signup: ${error.message}`);
     throw new Error(error.message);
   }
 };
@@ -101,7 +101,7 @@ export const signin = async (req: Request, res: Response) : Promise<any> => {
       .status(StatusCodes.OK)
       .json({ message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
   } catch (error: any) {
-    logger.error("Error during signup:", error);
+    logger.error(`Error during signup: ${error.message}`);
     throw new Error(error.message);
   }
 };
@@ -109,6 +109,7 @@ export const signin = async (req: Request, res: Response) : Promise<any> => {
 export const sendOtp = async (req: Request, res: Response): Promise<any> => {
     try {
         const { email } = req.body;
+        logger.info(`requested for otp : ${email}`);
         const otpAlreadyExist = await redisClient.get(`otp:${email}`);
         if(otpAlreadyExist){
            return res.status(StatusCodes.CONFLICT).json({
@@ -119,10 +120,10 @@ export const sendOtp = async (req: Request, res: Response): Promise<any> => {
         const otp = generateOTP();
         await redisClient.setEx(`otp:${email}`, 300, otp); // expires in 5 min
         await sendEmail(email, 'Your OTP Code', `Your code is: ${otp}`);
-        logger.info("otp : ",otp);
+        logger.info(`otp : ${otp} `);
         res.status(StatusCodes.ACCEPTED).json({ success:true, message: 'OTP sent successfully' });
     } catch (error: any) {
-        logger.error("Error during signup:", error.message);
+        logger.error(`Error during signup: ${error.message}`);
         throw new Error(error.message);
     }
 }
@@ -138,7 +139,7 @@ export const verifyOtp = async (req: Request, res: Response): Promise<any> => {
          res.status(StatusCodes.ACCEPTED).json({success:false, message: 'Invalid or expired OTP' });
       }
     } catch (error: any) {
-        logger.error("Error during signup:", error.message);
+        logger.error(`Error during signup: ${error.message}`);
         throw new Error(error.message);
     }
 }

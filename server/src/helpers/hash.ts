@@ -6,8 +6,8 @@ export const hashPassword=(password:any)=>{
         const saltRounds = 10;
         const hashedPassword = bcrypt.hash(password, saltRounds);
         return hashedPassword;
-    } catch (error) {
-        logger.error("Error hashing password:", error);
+    } catch (error:any) {
+        logger.error(`Error hashing password: ${error.message}`);
         throw new Error("Failed to hash password");
     }
 }

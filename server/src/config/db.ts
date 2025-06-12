@@ -9,8 +9,8 @@ export const connectToDB = async () => {
   try {
     await mongoose.connect(MONGO_URI as string);
     logger.info('Connected to MongoDB Atlas');
-  } catch (err) {
-    logger.error('MongoDB connection failed:', err);
+  } catch (err:any) {
+    logger.error(`MongoDB connection failed: ${err.message}`);
     process.exit(1);
   }
 };

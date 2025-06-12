@@ -9,7 +9,7 @@ export const validateRequest = (schema: AnyZodObject) =>
       schema.parse(req.body);
       next();
     } catch (err: any) {
-      logger.error('Validation error:', err.errors);  
+      logger.error(`Validation error: ${err.message}`);  
       res.status(StatusCodes.BAD_REQUEST).json({ errors: err.errors });
     }
 };
