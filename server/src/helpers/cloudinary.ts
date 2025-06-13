@@ -12,7 +12,7 @@ cloudinary.config({
     fileBuffer: Buffer,
     folder: string,
     resourceType: 'image' | 'auto' | 'raw' = 'auto'
-  ): Promise<string> => {
+  ): Promise<any> => {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         { folder, resource_type: resourceType },

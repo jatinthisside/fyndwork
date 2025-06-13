@@ -7,6 +7,7 @@ import { hashPassword, sendEmail } from "../helpers";
 import { generateOTP } from "../utils";
 import { redisClient, logger } from "../config";
 import { JWT_SECRET, JWT_EXPIRES,NODE_ENV } from '../config';
+import { compressImage, uploadToCloud } from "../helpers";
 
 export const signup = async (req: Request, res: Response) : Promise<any> => {
   try {
@@ -36,6 +37,13 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
       });
     }
 
+    let image_url = `https://avatar.iran.liara.run/username?username=${name}`;
+    if(req.file){
+       const resizedImage = await compressImage(req.file.buffer);
+       const savedImage = await uploadToCloud(resizedImage, "fyndwork/profile", "image");
+       image_url = savedImage.secure_url;
+    }
+
     const isVerified = await redisClient.get(`verified:${email}`);
     if (!isVerified) return res.status(403).json({ message: 'Email not verified' });
 
@@ -53,6 +61,7 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
       country,
       pincode,
       street,
+      profile_photo: image_url
     });
 
     await redisClient.del(`verified:${email}`); // Clean up
@@ -65,6 +74,7 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
           email: user.email,
           name: user.name,
           role: user.role,
+          profile_photo: image_url
         },
     });
 
