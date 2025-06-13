@@ -11,6 +11,9 @@ export const {
   NODE_ENV = 'development',
   CLIENT_ORIGIN = 'http://localhost:3000',
   REDIS_URL = 'redis://localhost:6379',
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET
 } = process.env;
 
 
