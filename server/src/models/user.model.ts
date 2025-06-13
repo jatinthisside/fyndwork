@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     pincode: { type: Number, required: false },
     street: { type: String, required: false },
     password: { type: String, required: false }, // Optional for OAuth users
-    profile_photo: { type: String },
+    profile_photo: { type: String, required:false },
     student_profile: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "StudentProfile",
