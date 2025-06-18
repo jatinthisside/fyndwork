@@ -8,10 +8,10 @@ export const signupSchema = z.object({
     city: z.string({invalid_type_error:"city should be a valid string",required_error:"city is required"}),
     state: z.string({invalid_type_error:"state should be a valid string",required_error:"state is required"}),
     country: z.string({invalid_type_error:"country should be a valid string",required_error:"country is required"}),
-    pincode: z.number({invalid_type_error:"pincode should be a valid number",required_error:"pincode is required"}),
+    // pincode: z.number({invalid_type_error:"pincode should be a valid number",required_error:"pincode is required"}),
     street: z.string({invalid_type_error:"street address should be a valid string",required_error:"street is required"}),
-    password: z.string({invalid_type_error:"password should be a valid string",required_error:"password is required"}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/, "Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, and one number"),
-    profile_photo: z.string({invalid_type_error:"profile_photo should be a valid string",required_error:"profile_photo is required"}),
+    password: z.string({invalid_type_error:"password should be a valid string",required_error:"password is required"}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/, "Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, and one number"),
+    // profile_photo: z.string({invalid_type_error:"profile_photo should be a valid string",required_error:"profile_photo is required"}).optional(),
 });
 
 export const loginSchema = z.object({
