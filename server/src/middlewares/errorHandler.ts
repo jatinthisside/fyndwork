@@ -12,7 +12,7 @@ export const errorHandler = (err: AppError,req: Request,res: Response,next: Next
   const statusCode = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
   const message = err.message || 'Something went wrong';
 
-  logger.error(`error // method:${req.method} - status:${statusCode} - path:${req.originalUrl} //`);
+  logger.error(`error // method:${req.method} - status:${statusCode} - path:${req.originalUrl} - message:${message} //`);
 
   res.status(statusCode).json({
     success: false,
