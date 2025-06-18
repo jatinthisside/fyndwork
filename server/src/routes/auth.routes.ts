@@ -3,11 +3,12 @@ import { authLimiter,otpRateLimiter,loginLimiter } from "../middlewares/rateLimi
 import { validateRequest } from "../middlewares/validateRequest";
 import { signup, signin, sendOtp, verifyOtp } from "../controllers/auth.controllers";
 import { signupSchema,loginSchema, sendOtpSchema, verifyOtpSchema } from "../schemas/auth.schema";
+import {upload} from "../middlewares/multer";
 
 const router = express.Router();
 
 // User Authentication Routes
-router.post("/signup", authLimiter, validateRequest(signupSchema), signup);
+router.post("/signup", authLimiter, upload.single("profile_photo"), validateRequest(signupSchema), signup);
 router.post("/login", loginLimiter, validateRequest(loginSchema), signin);
 
 // Verification Routes

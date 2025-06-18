@@ -37,18 +37,18 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
       });
     }
 
+    const isVerified = await redisClient.get(`verified:${email}`);
+    if (!isVerified) return res.status(403).json({ message: 'Email not verified' });
+
+    // hash password
+    const hashedPassword = await hashPassword(password);
+
     let image_url = `https://avatar.iran.liara.run/username?username=${name}`;
     if(req.file){
        const resizedImage = await compressImage(req.file.buffer);
        const savedImage = await uploadToCloud(resizedImage, "fyndwork/profile", "image");
        image_url = savedImage.secure_url;
     }
-
-    const isVerified = await redisClient.get(`verified:${email}`);
-    if (!isVerified) return res.status(403).json({ message: 'Email not verified' });
-
-    // hash password
-    const hashedPassword = await hashPassword(password);
 
     const user = await User.create({
       email,
