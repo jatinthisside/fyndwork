@@ -39,6 +39,8 @@ export const setupStudentProfile=async(req: Request, res: Response):Promise<any>
       { new: true, upsert: true, runValidators: true }
     );
 
+     await redisClient.del(`student:profile:${userId}`);
+
      res.status(StatusCodes.ACCEPTED).json({
       success: true,
       message: 'Student profile updated successfully',
@@ -172,3 +174,5 @@ export const deleteStudentAccount = async (req: Request, res: Response):Promise<
     session.endSession();
   }
 };
+
+// Routes to add Education - Certificates etc
