@@ -112,7 +112,7 @@ export const getStudentProfile = async (req: Request, res: Response):Promise<any
   }
 };
 
-export const deleteStudentAccount = async (req: Request, res: Response) => {
+export const deleteStudentAccount = async (req: Request, res: Response):Promise<any> => {
   const session = await mongoose.startSession();
   session.startTransaction();
   
