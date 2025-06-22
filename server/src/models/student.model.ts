@@ -9,15 +9,12 @@ const StudentProfileSchema = new mongoose.Schema(
       unique: true,
     },
     skills: [String],
-    portfolio_link: String,
+    portfolio: String,
     resume: String,
     education: [
       {
-        degree: String,
-        institution: String,
-        start_date: Date,
-        end_date: Date,
-        grade: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Education",
       },
     ],
     saved_tasks: [

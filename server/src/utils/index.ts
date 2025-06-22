@@ -1,3 +1,4 @@
 import { generateOTP } from "./generateOtp";
+import { toObjectId } from "./convertor";
 
-export { generateOTP };
+export { generateOTP, toObjectId };

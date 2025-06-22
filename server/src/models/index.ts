@@ -9,8 +9,10 @@ import { Payment } from "./payment.model";
 import { Application } from "./application.model";
 import { RatingReview } from "./rating.model";
 import { Feedback } from "./feedback.model";
+import { Education } from "./education.model";
 
 export {
+    Education,
     User,
     Certificate,
     Task,
