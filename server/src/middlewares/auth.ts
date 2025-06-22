@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import { IUser } from "../types";
 import { StatusCodes } from "http-status-codes";
 
 type AllowedRoles = "student" | "company" | "admin" | "all";
 
-export const authenticate = (role: AllowedRoles = "all") => {
-    return (req: Request | any, res: Response, next: NextFunction) => {
+export const authenticate = (role: AllowedRoles = "all"):RequestHandler => {
+    return (req: Request | any, res: Response, next: NextFunction):any => {
       const user = req.user as IUser | undefined;
   
       if (!user) {
