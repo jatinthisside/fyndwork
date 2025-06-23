@@ -33,6 +33,7 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
 
     if (isUserExists) {
       return res.status(StatusCodes.BAD_REQUEST).json({
+        success:false,
         message: "User already exists with this email",
       });
     }

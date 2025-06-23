@@ -5,7 +5,7 @@ import EducationRoutes from './education.routes';
 
 const router = Router();
 
-router.use('/users', userRoutes);
+router.use('/', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/education', EducationRoutes);
 
