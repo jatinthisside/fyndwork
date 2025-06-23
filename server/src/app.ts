@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import routes from './routes';
+import cookieParser from 'cookie-parser';
 import { performanceLogger } from './middlewares/performanceLogger';
 import { errorHandler } from './middlewares/errorHandler';
 import { CLIENT_ORIGIN } from './config';
@@ -16,7 +17,7 @@ app.use(
       allowedHeaders: ['Content-Type', 'Authorization'],
     })
 ); 
-
+app.use(cookieParser())
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
