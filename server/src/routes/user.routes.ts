@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/', getAllUsers); // GET /api/v1/users
 router.post('/profile/student', decodeToken, authenticate("student"), validateRequest(studentProfileSchema), setupStudentProfile);
-router.get('/profile/student', authenticate("student"), getStudentProfile); 
-router.patch('/profile/student', authenticate("student"), deleteStudentAccount); 
+router.get('/profile/student', decodeToken, authenticate("student"), getStudentProfile); 
+router.patch('/profile/student', decodeToken, authenticate("student"), deleteStudentAccount); 
 
 export default router;

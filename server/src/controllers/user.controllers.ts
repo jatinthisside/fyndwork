@@ -3,7 +3,7 @@ import { StudentProfile, Education, Certificate, Task, User } from "../models";
 import { toObjectId } from "../utils";
 import { IStudentProfile } from "../types";
 import { StatusCodes } from 'http-status-codes';
-import { redisClient } from '../config';
+import { logger, redisClient } from '../config';
 import mongoose from 'mongoose';
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +15,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const setupStudentProfile=async(req: Request, res: Response):Promise<any>=>{
+export const setupStudentProfile=async(req: Request, res: Response, next:NextFunction):Promise<any>=>{
   try {
     const userId = req.user!.user_id;
 
@@ -47,7 +47,8 @@ export const setupStudentProfile=async(req: Request, res: Response):Promise<any>
       profile
     });
   } catch (error:any) {
-     throw new Error(error.message || 'Error setting up student profile');
+     logger.error(`Error setting up student profile: ${error.message}`);
+     next(error);
   }
 }
 
