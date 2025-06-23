@@ -9,7 +9,7 @@ export const authenticate = (role: AllowedRoles = "all"):RequestHandler => {
       const user = req.user as IUser | undefined;
   
       if (!user) {
-        return res.status(StatusCodes.FORBIDDEN).json({ error: "Unauthorized: No user token" });
+        return res.status(StatusCodes.FORBIDDEN).json({ success:false, error: "Unauthorized: No user token" });
       }
   
       if (role === "all") {
