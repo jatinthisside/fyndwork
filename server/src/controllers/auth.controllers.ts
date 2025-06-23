@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { User } from "../models";
 import bcrypt from 'bcrypt';
@@ -9,7 +9,7 @@ import { redisClient, logger } from "../config";
 import { JWT_SECRET, JWT_EXPIRES,NODE_ENV } from '../config';
 import { compressImage, uploadToCloud } from "../helpers";
 
-export const signup = async (req: Request, res: Response) : Promise<any> => {
+export const signup = async (req: Request, res: Response, next:NextFunction) : Promise<any> => {
   try {
     const {email,name,role,password,about,city,state,country,pincode,street} = req.body;
 
@@ -81,11 +81,11 @@ export const signup = async (req: Request, res: Response) : Promise<any> => {
 
   } catch (error: any) {
     logger.error(`Error during signup: ${error.message}`);
-    throw new Error(error.message);
+    next(error);
   }
 };
 
-export const signin = async (req: Request, res: Response) : Promise<any> => {
+export const signin = async (req: Request, res: Response, next:NextFunction) : Promise<any> => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -127,14 +127,14 @@ export const signin = async (req: Request, res: Response) : Promise<any> => {
         maxAge: 24 * 60 * 60 * 1000, // 24 hr
       })
       .status(StatusCodes.OK)
-      .json({ message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
+      .json({success:true, message: 'Login successful', user: { id: user._id, email: user.email, role: user.role } });
   } catch (error: any) {
     logger.error(`Error during signup: ${error.message}`);
-    throw new Error(error.message);
+    next(error);
   }
 };
 
-export const sendOtp = async (req: Request, res: Response): Promise<any> => {
+export const sendOtp = async (req: Request, res: Response, next:NextFunction): Promise<any> => {
     try {
         const { email } = req.body;
         logger.info(`requested for otp : ${email}`);
@@ -152,11 +152,11 @@ export const sendOtp = async (req: Request, res: Response): Promise<any> => {
         res.status(StatusCodes.ACCEPTED).json({ success:true, message: 'OTP sent successfully' });
     } catch (error: any) {
         logger.error(`Error during signup: ${error.message}`);
-        throw new Error(error.message);
+        next(error);
     }
 }
 
-export const verifyOtp = async (req: Request, res: Response): Promise<any> => {
+export const verifyOtp = async (req: Request, res: Response, next:NextFunction): Promise<any> => {
     try {
       const { email, otp } = req.body;
       const storedOtp = await redisClient.get(`otp:${email}`);
@@ -168,7 +168,7 @@ export const verifyOtp = async (req: Request, res: Response): Promise<any> => {
       }
     } catch (error: any) {
         logger.error(`Error during signup: ${error.message}`);
-        throw new Error(error.message);
+        next(error);
     }
 }
 
