@@ -176,4 +176,3 @@ export const deleteStudentAccount = async (req: Request, res: Response):Promise<
   }
 };
 
-// Routes to add Education - Certificates etc
